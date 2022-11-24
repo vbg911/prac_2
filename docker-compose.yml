@@ -1,0 +1,23 @@
+services:
+    db:
+        image: mysql
+        container_name: mysql_2
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: MY_DATABASE
+            MYSQL_USER: MYSQL_USER
+            MYSQL_PASSWORD: MYSQL_PASSWORD
+        volumes:
+            - ./database/init.sql/:/docker-entrypoint-initdb.d/1.sql
+        ports:
+            - 5400:3306
+    server:
+        container_name: php-apache-2
+        build: ./server/
+        ports:
+            - 8080:80
+        volumes:
+            - ./server/php/src/:/var/www/html/
+        depends_on:
+            - db
